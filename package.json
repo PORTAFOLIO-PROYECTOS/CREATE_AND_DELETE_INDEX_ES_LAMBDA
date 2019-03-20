@@ -1,0 +1,23 @@
+{
+  "name": "elasticsearch_create_and_delete_index",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PORTAFOLIO-PROYECTOS/ELASTICSEARCH_CREATE_AND_DELETE_INDEX.git"
+  },
+  "author": "Team Search",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PORTAFOLIO-PROYECTOS/ELASTICSEARCH_CREATE_AND_DELETE_INDEX/issues"
+  },
+  "homepage": "https://github.com/PORTAFOLIO-PROYECTOS/ELASTICSEARCH_CREATE_AND_DELETE_INDEX#readme",
+  "dependencies": {
+    "elasticsearch": "^15.4.1",
+    "request": "^2.88.0"
+  }
+}
