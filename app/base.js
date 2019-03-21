@@ -2,7 +2,8 @@
 
 const utilsClass = require("./utils");
 const elasticsearch = require("elasticsearch");
-const request = require("async-request");
+const requestAsync = require("async-request");
+const request = require("request");
 const config = require("./config");
 const utils = new utilsClass();
 const esClient = new elasticsearch.Client({
@@ -34,7 +35,7 @@ module.exports = class Base {
     async getCampaniasActivas(pais) {
         try {
             let urlGetCampanias = utils.getAtiveCampaignsUrlWithCountry(pais);
-            let responseCampanias = await request(urlGetCampanias);
+            let responseCampanias = await requestAsync(urlGetCampanias);
             return JSON.parse(responseCampanias.body);
         } catch (error) {
             console.error(error);
