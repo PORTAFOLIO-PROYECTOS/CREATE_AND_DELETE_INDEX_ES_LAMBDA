@@ -11,22 +11,34 @@ const esClient = new elasticsearch.Client({
 
 module.exports = class Base {
     async createIndice() {
-        let indices = await this.getElasticIndices();
+        let indicesElastic = await this.getElasticIndices();
         let paises = utils.getCountries();
-        let indicesPorPaises = [];
 
         await utils.asyncForEach(paises, async (pais) => {
-            let urlGetCampanias = utils.getAtiveCampaignsUrlWithCountry(pais);
-            console.log("urlGetCampanias", urlGetCampanias);
-            //let responseCampanias = await 
+            let response = await this.getCampaniasActivas(pais);
+            console.log(`Pais: ${pais} | campañas: ${JSON.stringify(response)}`);
+
+            for (const key in response) {
+                const element = response[key];
+                let indiceBuscar = `${config.indexName}_${pais.toLowerCase()}_${element.toString()}`;
+
+                if (indicesElastic.indexOf(indiceBuscar) < 0){
+                    console.log(`se crea el indice ${indiceBuscar}`);
+                }
+            }
         });
 
-        console.log("indices", indices);
-
+        console.log(indicesElastic);
     }
 
-    async getCampaniasActivas(pais){
-        return new Promise 
+    async getCampaniasActivas(pais) {
+        try {
+            let urlGetCampanias = utils.getAtiveCampaignsUrlWithCountry(pais);
+            let responseCampanias = await request(urlGetCampanias);
+            return JSON.parse(responseCampanias.body);
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     async getElasticIndices() {
