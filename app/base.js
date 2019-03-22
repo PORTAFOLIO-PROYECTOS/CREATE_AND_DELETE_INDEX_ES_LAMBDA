@@ -5,13 +5,14 @@ const elasticsearch = require("elasticsearch");
 const requestAsync = require("async-request");
 const request = require("request");
 const config = require("./config");
+const data = require("./data");
 const utils = new utilsClass();
 const esClient = new elasticsearch.Client({
     host: config.elasticUrl
 });
 
 module.exports = class Base {
-    async createIndice() {
+    async inicio() {
         let indicesElastic = await this.getElasticIndices();
         let paises = utils.getCountries();
 
@@ -23,13 +24,25 @@ module.exports = class Base {
                 const element = response[key];
                 let indiceBuscar = `${config.indexName}_${pais.toLowerCase()}_${element.toString()}`;
 
-                if (indicesElastic.indexOf(indiceBuscar) < 0){
+                if (indicesElastic.indexOf(indiceBuscar) < 0) {
                     console.log(`se crea el indice ${indiceBuscar}`);
+                    this.createIndex(indiceBuscar);
                 }
             }
         });
 
         console.log(indicesElastic);
+    }
+
+    createIndex(nameIndex) {
+        request({
+            url: `${config.elasticUrl}/${nameIndex}`,
+            method: "PUT",
+            json: data.createIndex
+        }, (error, res, status) => {
+            if (error) return console.error(error);
+            console.log(`indice creado: ${nameIndex} | ${JSON.stringify(res)}`);
+        });
     }
 
     async getCampaniasActivas(pais) {
