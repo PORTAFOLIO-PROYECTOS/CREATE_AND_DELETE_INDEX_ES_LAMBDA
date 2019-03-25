@@ -22,7 +22,6 @@ module.exports = class Base {
 
             console.log(`Pais: ${pais} | campañas: ${JSON.stringify(response)}`);
             console.log("Indices creados", indicesCreados);
-            console.log("Todos los indices", indicesElastic);
 
             for (const key in response) {
                 const element = response[key];
@@ -38,9 +37,9 @@ module.exports = class Base {
 
             for (const key in indicesCreados) {
                 const element = indicesCreados[key];
-
+                console.log("Listo para eliminar", element);
             }
-            console.log("Indices creados", indicesCreados);
+
         });
 
     }
