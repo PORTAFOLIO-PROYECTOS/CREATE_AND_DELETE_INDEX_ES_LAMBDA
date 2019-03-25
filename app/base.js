@@ -18,23 +18,35 @@ module.exports = class Base {
 
         await utils.asyncForEach(paises, async (pais) => {
             let response = await this.getCampaniasActivas(pais);
+            let indicesCreados = utils.getIndicesPorPais(pais.toLowerCase(), indicesElastic);
+
             console.log(`Pais: ${pais} | campañas: ${JSON.stringify(response)}`);
+            console.log("Indices creados", indicesCreados);
+            console.log("Todos los indices", indicesElastic);
 
             for (const key in response) {
                 const element = response[key];
                 let indiceBuscar = `${config.indexName}_${pais.toLowerCase()}_${element.toString()}`;
 
-                if (indicesElastic.indexOf(indiceBuscar) < 0) {
-                    console.log(`se crea el indice ${indiceBuscar}`);
+                if (indicesElastic.indexOf(indiceBuscar) < 0) { // SI ES MENOR QUE CERO
                     this.createIndex(indiceBuscar);
+                } else {
+                    let index = indicesCreados.indexOf(indiceBuscar);
+                    if (index > -1) indicesCreados.splice(index, 1);
                 }
             }
+
+            for (const key in indicesCreados) {
+                const element = indicesCreados[key];
+
+            }
+            console.log("Indices creados", indicesCreados);
         });
 
-        console.log(indicesElastic);
     }
 
     createIndex(nameIndex) {
+        console.log(`se crea el indice ${nameIndex}`);
         request({
             url: `${config.elasticUrl}/${nameIndex}`,
             method: "PUT",
