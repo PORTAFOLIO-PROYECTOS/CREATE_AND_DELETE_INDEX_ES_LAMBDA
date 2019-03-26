@@ -20,8 +20,9 @@ module.exports = class Base {
             let response = await this.getCampaniasActivas(pais);
             let indicesCreados = utils.getIndicesPorPais(pais.toLowerCase(), indicesElastic);
 
-            console.log(`Pais: ${pais} | campañas: ${JSON.stringify(response)}`);
-            console.log("Indices creados", indicesCreados);
+            console.log("*******");
+            console.log(`Pais: ${pais} | campañas activas: ${JSON.stringify(response)}`);
+            console.log("Indices creados:", indicesCreados);
 
             for (const key in response) {
                 const element = response[key];
@@ -37,7 +38,7 @@ module.exports = class Base {
 
             for (const key in indicesCreados) {
                 const element = indicesCreados[key];
-                console.log("Listo para eliminar", element);
+                this.deleteIndex(element);
             }
 
         });
@@ -46,14 +47,21 @@ module.exports = class Base {
 
     createIndex(nameIndex) {
         console.log(`se crea el indice ${nameIndex}`);
-        request({
-            url: `${config.elasticUrl}/${nameIndex}`,
-            method: "PUT",
-            json: data.createIndex
-        }, (error, res, status) => {
-            if (error) return console.error(error);
-            console.log(`indice creado: ${nameIndex} | ${JSON.stringify(res)}`);
+
+        let params = {
+            index: nameIndex,
+            body: data.createIndex
+        }
+
+        esClient.indices.create(params, (error, response, status) => {
+            if (error) console.log("Error al crear indice: ", nameIndex);
+            console.log("Indice creado: ", nameIndex, response);
         });
+    }
+
+    deleteIndex(nameIndex){
+        console.log(`se elimina el indice ${nameIndex}`);
+
     }
 
     async getCampaniasActivas(pais) {
@@ -91,3 +99,7 @@ module.exports = class Base {
         }
     }
 }
+
+/**
+ * 
+ */
