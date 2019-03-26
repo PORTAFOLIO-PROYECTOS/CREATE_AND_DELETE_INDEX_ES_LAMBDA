@@ -55,7 +55,7 @@ module.exports = class Base {
 
         esClient.indices.create(params, (error, response, status) => {
             if (error) console.log("Error al crear indice: ", nameIndex);
-            console.log("Indice creado: ", nameIndex, response);
+            console.log("Indice creado: ", nameIndex, JSON.stringify(response));
         });
     }
 
@@ -68,7 +68,7 @@ module.exports = class Base {
 
         esClient.indices.delete(params, (error, response, status) => {
             if (error) console.log("Error al eliminar indice:", nameIndex);
-            console.log("Indice eliminado", nameIndex, response);
+            console.log("Indice eliminado", nameIndex, JSON.stringify(response));
         });
     }
 
