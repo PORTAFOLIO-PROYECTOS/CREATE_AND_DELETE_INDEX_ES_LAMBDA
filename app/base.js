@@ -59,9 +59,17 @@ module.exports = class Base {
         });
     }
 
-    deleteIndex(nameIndex){
+    deleteIndex(nameIndex) {
         console.log(`se elimina el indice ${nameIndex}`);
+        let params = {
+            index: nameIndex,
+            body: []
+        }
 
+        esClient.indices.delete(params, (error, response, status) => {
+            if (error) console.log("Error al eliminar indice:", nameIndex);
+            console.log("Indice eliminado", nameIndex, response);
+        });
     }
 
     async getCampaniasActivas(pais) {
@@ -101,5 +109,5 @@ module.exports = class Base {
 }
 
 /**
- * 
+ *
  */
