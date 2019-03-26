@@ -1,7 +1,7 @@
 "use strict";
 
 const elasticsearch = require("elasticsearch");
-const requestAsync = require("async-request");
+const request = require("request");
 
 const utilsClass = require("./utils");
 const config = require("./config");
@@ -19,6 +19,7 @@ module.exports = class Base {
 
         await utils.asyncForEach(paises, async (pais) => {
             let response = await this.getCampaniasActivas(pais);
+            if (response) response = JSON.parse(response);
             let indicesCreados = utils.getIndicesPorPais(pais.toLowerCase(), indicesElastic);
 
             console.log("*******");
@@ -76,8 +77,12 @@ module.exports = class Base {
     async getCampaniasActivas(pais) {
         try {
             let urlGetCampanias = utils.getAtiveCampaignsUrlWithCountry(pais);
-            let responseCampanias = await requestAsync(urlGetCampanias);
-            return JSON.parse(responseCampanias.body);
+            return new Promise((resolve, reject) => {
+                request(urlGetCampanias, (error, response, body) => {
+                    if (error) reject(error);
+                    resolve(body);
+                });
+            });
         } catch (error) {
             console.error(error);
         }
