@@ -1,11 +1,12 @@
 "use strict";
 
-const utilsClass = require("./utils");
 const elasticsearch = require("elasticsearch");
 const requestAsync = require("async-request");
-const request = require("request");
+
+const utilsClass = require("./utils");
 const config = require("./config");
 const data = require("./data");
+
 const utils = new utilsClass();
 const esClient = new elasticsearch.Client({
     host: config.elasticUrl

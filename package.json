@@ -19,7 +19,6 @@
   "homepage": "https://github.com/PORTAFOLIO-PROYECTOS/ELASTICSEARCH_CREATE_AND_DELETE_INDEX#readme",
   "dependencies": {
     "async-request": "^1.2.0",
-    "elasticsearch": "^15.4.1",
-    "request": "^2.88.0"
+    "elasticsearch": "^15.4.1"
   }
 }
